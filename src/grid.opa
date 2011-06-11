@@ -41,7 +41,7 @@ Grid = {{
     line(line)=List.init((i -> <td class="case" id="{line}_{i}" 
                                    onmouseover={_ -> Dom.set_class(Dom.select_id("b_{i}"), "rollover")}
                                    onmouseout={_ -> Dom.set_class(Dom.select_id("b_{i}"), "selecteur")}
-                                   onclick={_ -> click(i)} ></> ), nbline)
+                                   onclick={_ -> click(i)} ></> ), nbcol)
     table=List.init((i -> <tr>{line(i)}</tr> ), nbline)
     selecteur=List.init((i -> <input type="button" id="b_{i}" class="selecteur"/>), nbcol)
     <>{List.fold((v,a -> <>{a}</><>{v}</>), selecteur, <></>)}</><table>{List.fold((v,a -> <>{a}</><>{v}</>), table, <></>)}</table>

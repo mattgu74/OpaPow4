@@ -111,6 +111,57 @@ type Game.message = { add : string } /
                     else
                       Option.get(List.get( i , grid))), Pow4.conf.col)
 
+  /*
+   This function detect if there is a victory
+   if yes, the next turn is {fin}
+   else the next turn is default
+
+   @param grid is the grid, c is the col where the last pions was pushed, and default is the next turn color
+          now is the other color
+  */
+  detect_win(grid, c, now, default) =
+    get(col, line) = Option.get(List.get( line, 
+                       Option.get(List.get(col, grid))
+                     ))
+    (_, l) = List.fold((v, acc -> (fin, nb) = acc
+                                  if fin != {true} then
+                                    if v != {empty} then 
+                                      ({true}, nb)
+                                    else
+                                      ({false}, nb+1)
+                                  else
+                                    acc)
+                        ,Option.get(List.get(c, grid)), ({false},0))
+    rec detect(deb, fin, inc, nb)=(
+      do jlog(String.of_int(nb))
+      (deb1, deb2) = deb
+      (fin1, fin2) = fin
+      // conditions de fin
+      if nb == 4 then
+        {true}
+      else
+        if ((deb1 > fin1) || (deb2 > fin2)) then
+          {false}
+        else
+          if deb1 >= 0 && deb2 >= 0 && deb1 < Pow4.conf.col && deb2 < Pow4.conf.line then
+            if get(deb1, deb2) == now then
+              detect(inc(deb), fin, inc, nb+1)
+            else
+              detect(inc(deb), fin, inc, 0)
+          else
+            {false}
+    )
+    // detection
+    if detect((c-3, l), (c+3, l), ((a, b) -> (a+1, b)), 0) == {true} ||
+       detect((c, l-3),(c, l+3), ((a, b) -> (a, b+1)), 0) == {true} ||
+       detect((c-3, l-3), (c+3,l+3), ((a, b) -> (a+1, b+1)), 0) == {true} ||
+       detect((c+3, l-3), (c+3,l+3), ((a, b) -> (a-1, b+1)), 0) == {true} 
+    then
+      do jlog("End of the game") // Todo : some work to do here
+      {fin}
+    else
+      default
+      
 
   action(game_list, a) =
     play(game, action, color) =
@@ -124,7 +175,7 @@ type Game.message = { add : string } /
         do Grid.broadcast({play = action ; ~color }, Option.get(game.playerred))
         do Grid.broadcast({play = action ; ~color }, Option.get(game.playerblue))
         newgrid = push_in_grid(col, game.grid, color)
-        nexturn = if color == {blue} then {red} else {blue}
+        nexturn = detect_win(newgrid, col, if color == { blue } then { blue } else { red }, if color == { blue } then { red } else { blue })
         { game with turn = nexturn ; grid = newgrid }
 
     fun(v, acc)=
