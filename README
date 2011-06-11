@@ -1,0 +1,19 @@
+== A Connect4 Game ==
+
+@author Matthieu Guffroy
+
+BUILDING
+ make
+
+
+LAUNCHING
+ ./main.exe
+(launches on port 8080)
+
+or
+ ./main.exe --server-port nnnn
+
+
+Design from Thomas Buffet
+see the original project : http://www.thomas-buffet.com/web/puissance4
+
