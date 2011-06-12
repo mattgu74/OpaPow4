@@ -46,10 +46,9 @@ Grid = {{
     selecteur=List.init((i -> <input type="button" id="b_{i}" class="selecteur"/>), nbcol)
     <>{List.fold((v,a -> <>{a}</><>{v}</>), selecteur, <></>)}</><table>{List.fold((v,a -> <>{a}</><>{v}</>), table, <></>)}</table>
 
-  init(nbcol, nbline)=
+  init()=
     do Network.add_callback(receive, room)
-    do Game.add(Option.get(Player.get()).name)
-    Dom.transform([#gamefield <- empty(nbcol, nbline)])
+    Game.add(Option.get(Player.get()).name)
 
   click(col)= 
     do Game.click(Option.get(Player.get()).name, col)

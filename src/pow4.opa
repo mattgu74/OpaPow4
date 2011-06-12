@@ -41,10 +41,9 @@ Pow4 = {{
     do Session.send(Player.players, {add = player.name})                    
     do Dom.transform([#afficheur <- <>Connexion réussi <strong>{player.name}</strong>!</>])
     do Dom.set_class(#afficheur, "afficheur_success")
-    do Scheduler.timer(10000, Player.scoreboard) 
-    do Scheduler.sleep(100, Player.scoreboard)
-    do ping( -> Player.ping(player.name))    
-    do Scheduler.sleep(100, ( -> Grid.init(conf.col, conf.line)) )
+    do Scheduler.timer(10000, ( -> Dom.transform([#scoreboard <- Player.scoreboard()])))
+    do ping( -> Player.ping(player.name))  
+    do Grid.init()
     chat=
       id = Random.string(8)
       config = CChat.default_config(id)
@@ -55,7 +54,7 @@ Pow4 = {{
         <h4>Chat</h4>
         {chat}
     </div>
-    <div id=#gamefield />
-    <div id=#scoreboard />
+    <div id=#gamefield >{Grid.empty(conf.col, conf.line)} </>
+    <div id=#scoreboard >{Player.scoreboard()}</>
 
 }}

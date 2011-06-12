@@ -36,7 +36,7 @@ Player = {{
   manage_players(player_list : stringmap(Date.date), action : Player.player_action) =
     clean(key, u, acc) =
       time = Duration.in_seconds(Duration.between(u, Date.now()))
-      if time > 20. then
+      if time > 30. then
          do /players[key] <- { /players[key] with online = {false} }
          do Game.remove(key)
          acc
@@ -99,7 +99,7 @@ Player = {{
   scoreboard() = 
     users = List.sort_by((u -> u.rank), Map.fold((_, v, acc -> List.add(v, acc)), /players, List.empty))
     table = List.fold((elt, acc -> <>{acc}</><tr><td>{elt.name}</td><td>{elt.rank}</td><td>{if elt.online == { true } then "Y" else "N"}</td></tr>), users, <></>)
-    Dom.transform([#scoreboard <- <h4> Scoreboard </h4><table><thead><td>Name</td><td>Rank</td><td> Online </td></thead>{table}</table>])
+    <h4> Scoreboard </h4><table><thead><td>Name</td><td>Rank</td><td> Online </td></thead>{table}</table>
 
 }}
 
