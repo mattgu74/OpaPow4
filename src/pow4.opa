@@ -15,7 +15,7 @@
 */
 
 package mattgu74.pow4
-import components.chat
+import stdlib.components.chat
 
 @server default_chat = CChat.init(CChat.default_config(Random.string(8)))
 

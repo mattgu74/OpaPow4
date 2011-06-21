@@ -16,6 +16,8 @@
 
 package mattgu74.pow4
 
+import stdlib.crypto
+
 type Player.player = {
   name : string ;
   pwd : string ;
